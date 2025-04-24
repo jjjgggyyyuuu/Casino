@@ -3,6 +3,12 @@ import Stripe from 'stripe';
 // Initialize Stripe with your secret key (in production, use environment variables)
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || 'sk_test_your_test_key');
 
+// Use proper API key selection based on environment
+const isProduction = process.env.NODE_ENV === 'production';
+if (isProduction && !process.env.STRIPE_SECRET_KEY) {
+  console.error('WARNING: Production environment detected but STRIPE_SECRET_KEY is not set. Payments will fail.');
+}
+
 /**
  * Process a deposit to add funds to the user's balance
  * @param {number} amount - Amount in USD cents to deposit
